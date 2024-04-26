@@ -1,8 +1,8 @@
 package typeControllers
 
 import (
-	"github.com/AIFuzi/hakuro-shop/internal/database"
-	"github.com/AIFuzi/hakuro-shop/internal/models"
+	"github.com/AIFuzi/hakuro-shop/internal/app/database"
+	"github.com/AIFuzi/hakuro-shop/internal/app/models"
 	"github.com/gofiber/fiber/v2"
 )
 

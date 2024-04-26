@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/AIFuzi/hakuro-shop/internal/models"
+	models2 "github.com/AIFuzi/hakuro-shop/internal/app/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -18,7 +18,7 @@ func New() {
 
 	DB = conn
 
-	err = conn.AutoMigrate(models.User{}, models.Types{}, models.Product{})
+	err = conn.AutoMigrate(models2.User{}, models2.Types{}, models2.Product{})
 	if err != nil {
 		log.Fatal("Fatal error: Failed to migrate models")
 	}

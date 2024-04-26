@@ -1,8 +1,8 @@
 package routes
 
 import (
-	typeControllers "github.com/AIFuzi/hakuro-shop/internal/controllers"
-	"github.com/AIFuzi/hakuro-shop/internal/middleware"
+	"github.com/AIFuzi/hakuro-shop/internal/app/controllers"
+	"github.com/AIFuzi/hakuro-shop/internal/app/middleware"
 	"github.com/gofiber/fiber/v2"
 )
 

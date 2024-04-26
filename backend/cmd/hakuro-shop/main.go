@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/AIFuzi/hakuro-shop/internal/database"
-	"github.com/AIFuzi/hakuro-shop/internal/routes"
+	"github.com/AIFuzi/hakuro-shop/internal/app/database"
+	"github.com/AIFuzi/hakuro-shop/internal/app/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
