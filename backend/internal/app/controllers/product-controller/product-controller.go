@@ -8,14 +8,42 @@ import (
 	"os"
 )
 
-const queryFilter = "id"
+const queryIdFilter = "id"
+const queryTypeIdFilter = "typeID"
 
 func GetAll(ctx *fiber.Ctx) error {
-	return nil
+	var product []models.Product
+
+	id := ctx.Query(queryTypeIdFilter)
+	res := database.DB
+
+	if len(id) > 0 {
+		res = database.DB.Where("type_id = ?", id).Find(&product)
+	} else {
+		res = database.DB.Find(&product)
+	}
+
+	if res.Error != nil {
+		ctx.Status(fiber.StatusBadRequest)
+
+		return ctx.JSON(fiber.Map{"Message": "Bad request"})
+	}
+
+	return ctx.JSON(product)
 }
 
 func GetOne(ctx *fiber.Ctx) error {
-	return nil
+	id, _ := ctx.ParamsInt(queryIdFilter)
+	product := models.Product{}
+
+	res := database.DB.Where("id = ?", id).First(&product)
+	if res.Error != nil {
+		ctx.Status(fiber.StatusNotFound)
+
+		return ctx.JSON(fiber.Map{"Message": "RecordNotFound"})
+	}
+
+	return ctx.JSON(product)
 }
 
 func Create(ctx *fiber.Ctx) error {
@@ -57,7 +85,7 @@ func Create(ctx *fiber.Ctx) error {
 }
 
 func Delete(ctx *fiber.Ctx) error {
-	id, _ := ctx.ParamsInt(queryFilter)
+	id, _ := ctx.ParamsInt(queryIdFilter)
 	product := models.Product{ID: uint(id)}
 
 	database.DB.Where("id = ?", id).Find(&product)
