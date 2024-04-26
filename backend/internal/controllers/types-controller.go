@@ -11,11 +11,11 @@ const queryFilter = "id"
 func GetAll(ctx *fiber.Ctx) error {
 	var productTypes []models.Types
 
-	query := ctx.Queries()
-	if len(query[queryFilter]) > 0 {
-		res := database.DB.Where("id = ?", query[queryFilter]).First(&productTypes)
+	q := ctx.Queries()
+	if len(q[queryFilter]) > 0 {
+		res := database.DB.Where("id = ?", q[queryFilter]).First(&productTypes)
 		if res.Error != nil {
-			ctx.Status(fiber.StatusBadRequest)
+			ctx.Status(fiber.StatusNotFound)
 
 			return ctx.JSON(fiber.Map{"Message": "RecordNotFound"})
 		}
@@ -27,14 +27,10 @@ func GetAll(ctx *fiber.Ctx) error {
 }
 
 func Create(ctx *fiber.Ctx) error {
-	var data map[string]string
-	err := ctx.BodyParser(&data)
+	productType := models.Types{}
+	err := ctx.BodyParser(&productType)
 	if err != nil {
 		return err
-	}
-
-	productType := models.Types{
-		TypeName: data["typeName"],
 	}
 
 	res := database.DB.Create(&productType)
@@ -43,5 +39,20 @@ func Create(ctx *fiber.Ctx) error {
 
 		return ctx.JSON(fiber.Map{"Message": res.Error})
 	}
+
 	return ctx.JSON(productType)
+}
+
+func Delete(ctx *fiber.Ctx) error {
+	id, _ := ctx.ParamsInt(queryFilter)
+	productTypes := models.Types{ID: uint(id)}
+
+	res := database.DB.Delete(&productTypes)
+	if res.RowsAffected < 1 {
+		ctx.Status(fiber.StatusNotFound)
+
+		return ctx.JSON(fiber.Map{"Message": "RecordNotFound"})
+	}
+
+	return ctx.JSON(fiber.Map{"Message": "Type deleted"})
 }

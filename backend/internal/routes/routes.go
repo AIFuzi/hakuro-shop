@@ -13,4 +13,5 @@ func Setup(app *fiber.App) {
 
 	app.Get("/api/types", typeControllers.GetAll)
 	app.Post("/api/types/create", middleware.CheckIsAdmin, typeControllers.Create)
+	app.Delete("/api/types:id", middleware.CheckIsAdmin, typeControllers.Delete)
 }

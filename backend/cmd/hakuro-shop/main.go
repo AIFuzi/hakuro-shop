@@ -19,6 +19,7 @@ func main() {
 	database.New()
 
 	app := fiber.New()
+
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     os.Getenv("ORIGINS"),
 		AllowCredentials: true,

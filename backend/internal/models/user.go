@@ -5,5 +5,5 @@ type User struct {
 	Email    string `json:"email" gorm:"unique"`
 	Name     string `json:"name"`
 	Password []byte `json:"-"`
-	Role     string `json:"role"`
+	Role     string `json:"role" gorm:"default:USER"`
 }
