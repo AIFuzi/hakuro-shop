@@ -1,4 +1,4 @@
-package typeControllers
+package type_controller
 
 import (
 	"github.com/AIFuzi/hakuro-shop/internal/app/database"
