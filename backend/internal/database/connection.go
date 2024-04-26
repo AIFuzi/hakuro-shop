@@ -18,7 +18,7 @@ func New() {
 
 	DB = conn
 
-	err = conn.AutoMigrate(models.User{}, models.Types{})
+	err = conn.AutoMigrate(models.User{}, models.Types{}, models.Product{})
 	if err != nil {
 		log.Fatal("Fatal error: Failed to migrate models")
 	}
