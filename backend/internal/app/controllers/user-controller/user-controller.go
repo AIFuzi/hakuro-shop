@@ -60,7 +60,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	uc := jwt.MapClaims{
-		"iss":   "issuer",
+		"iss":   user.ID,
 		"exp":   time.Now().Add(time.Hour * 24).Unix(),
 		"Email": user.Email,
 		"Role":  user.Role,
@@ -76,7 +76,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:     "jwt",
+		Name:     os.Getenv("user_cookie_token_name"),
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
 		HTTPOnly: true,
@@ -89,7 +89,7 @@ func Login(ctx *fiber.Ctx) error {
 
 func Logout(ctx *fiber.Ctx) error {
 	cookie := fiber.Cookie{
-		Name:     "jwt",
+		Name:     os.Getenv("user_cookie_token_name"),
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),
 		HTTPOnly: true,
@@ -101,5 +101,17 @@ func Logout(ctx *fiber.Ctx) error {
 }
 
 func Check(ctx *fiber.Ctx) error {
-	return nil
+	token, err := jwt.Parse(ctx.Cookies(os.Getenv("user_cookie_token_name")), func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+	})
+
+	if err != nil {
+		ctx.Status(fiber.StatusUnauthorized)
+
+		return ctx.JSON(fiber.Map{"Message": "Unauthorized"})
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	return ctx.JSON(claims)
 }

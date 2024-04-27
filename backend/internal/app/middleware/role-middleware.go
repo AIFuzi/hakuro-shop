@@ -2,20 +2,32 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"strings"
+	"github.com/golang-jwt/jwt/v4"
+	"os"
 )
 
-const role = "admin"
+const role = "ADMIN"
 
 func CheckIsAdmin(ctx *fiber.Ctx) error {
-	val := ctx.Request().Header.Peek("User-Role")
-	if !strings.EqualFold(string(val), role) {
+	token, err := jwt.Parse(ctx.Cookies(os.Getenv("user_cookie_token_name")), func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+	})
+
+	if err != nil {
+		ctx.Status(fiber.StatusUnauthorized)
+
+		return ctx.JSON(fiber.Map{"Message": "Unauthorized"})
+	}
+
+	claims := token.Claims.(jwt.MapClaims)
+
+	if claims["Role"] != role {
 		ctx.Status(fiber.StatusForbidden)
 
 		return ctx.JSON(fiber.Map{"Message": "Access is denied"})
 	}
 
-	err := ctx.Next()
+	err = ctx.Next()
 	if err != nil {
 		return err
 	}
