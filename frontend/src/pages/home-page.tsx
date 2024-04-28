@@ -1,7 +1,9 @@
 const HomePage = () => {
     return (
-        <div>
-            HOME
+        <div className="flex h-screen">
+            <div className=" m-auto">
+                HOME
+            </div>
         </div>
     );
 };
