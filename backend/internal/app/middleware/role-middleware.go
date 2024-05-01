@@ -9,7 +9,7 @@ import (
 const role = "ADMIN"
 
 func CheckIsAdmin(ctx *fiber.Ctx) error {
-	token, err := jwt.Parse(ctx.Cookies(os.Getenv("user_cookie_token_name")), func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(ctx.Cookies(os.Getenv("USER_COOKIE_TOKEN_NAME")), func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
 

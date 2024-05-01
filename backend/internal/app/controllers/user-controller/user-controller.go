@@ -68,7 +68,7 @@ func Login(ctx *fiber.Ctx) error {
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, uc)
 
-	token, err := claims.SignedString([]byte(os.Getenv("jwt_secret_key")))
+	token, err := claims.SignedString([]byte(os.Getenv("JWT_SECRET_KEY")))
 	if err != nil {
 		ctx.Status(fiber.StatusInternalServerError)
 
@@ -76,7 +76,7 @@ func Login(ctx *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:     os.Getenv("user_cookie_token_name"),
+		Name:     os.Getenv("USER_COOKIE_TOKEN_NAME"),
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
 		HTTPOnly: true,
@@ -89,7 +89,7 @@ func Login(ctx *fiber.Ctx) error {
 
 func Logout(ctx *fiber.Ctx) error {
 	cookie := fiber.Cookie{
-		Name:     os.Getenv("user_cookie_token_name"),
+		Name:     os.Getenv("USER_COOKIE_TOKEN_NAME"),
 		Value:    "",
 		Expires:  time.Now().Add(-time.Hour),
 		HTTPOnly: true,
@@ -101,7 +101,7 @@ func Logout(ctx *fiber.Ctx) error {
 }
 
 func Check(ctx *fiber.Ctx) error {
-	token, err := jwt.Parse(ctx.Cookies(os.Getenv("user_cookie_token_name")), func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.Parse(ctx.Cookies(os.Getenv("USER_COOKIE_TOKEN_NAME")), func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
 	})
 
